@@ -5,8 +5,17 @@ import Header from "../common/Header";
 import Footer from "../common/Footer";
 import style from "../../styles/Home.module.css";
 
+//ページ遷移の秒数
+const exitDur = 500;
+const enterDur = 1000;
+
 export const pageTransBool = () => {
-   console.log("ページ遷移できたよ");
+   return new Promise((resolve) => {
+      setTimeout(() => {
+         console.log("ページ遷移のアニメーションが完了");
+         resolve();
+      }, exitDur + enterDur);
+   });
 };
 
 export default function Pagetransition({ children }) {
@@ -24,7 +33,7 @@ export default function Pagetransition({ children }) {
          {
             y: 0,
             autoAlpha: 1,
-            duration: 1,
+            duration: enterDur / 1000,
             ease: "power3.out",
          }
       );
@@ -41,7 +50,7 @@ export default function Pagetransition({ children }) {
          {
             y: -50,
             autoAlpha: 0,
-            duration: 0.5,
+            duration: exitDur / 1000,
             ease: "power3.inOut",
          }
       );
@@ -53,10 +62,12 @@ export default function Pagetransition({ children }) {
          <SwitchTransition>
             <Transition
                key={router.pathname}
-               timeout={500}
+               timeout={exitDur}
                in={true}
                onEnter={onPageEnter}
-               onEntered={pageTransBool}
+               // onEntered={() => {
+               //    console.log("ページ遷移できたよ");
+               // }}
                onExit={onPageExit}
                mountOnEnter={true}
                unmountOnExit={true}>
