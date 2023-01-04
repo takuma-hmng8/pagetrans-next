@@ -1,22 +1,33 @@
-import { useEffect } from "react";
-
 import "../styles/globals.css";
 import "the-new-css-reset/css/reset.css";
-import Pagetransition, { pageTransBool } from "../components/Layout";
+import Layout from "../components/PageTransition/Layout";
+import { useEffect, useRef } from "react";
 
-export default function App({ Component, pageProps, router }) {
+//初回レンダリングかどうかの判定
+export let isFirstRendering = true;
+
+export default function App({ Component, pageProps }) {
+   const ref = useRef(true);
    useEffect(() => {
-      (async () => {
-         await pageTransBool();
-         console.log(`${router.pathname}ページへの遷移が完了したよ`);
-      })();
-   }, [router.pathname]);
+      if (ref.current === true) {
+         /********************
+			初回の処理
+			********************/
+         ref.current = false;
+         return;
+      } else {
+         /********************
+			2回目以降の処理
+			********************/
+         isFirstRendering = false;
+      }
+   });
 
    return (
       <>
-         <Pagetransition>
+         <Layout>
             <Component {...pageProps} />
-         </Pagetransition>
+         </Layout>
       </>
    );
 }
